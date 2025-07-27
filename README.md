@@ -1,5 +1,6 @@
 # Bindershell
 
+![Latest Release](https://img.shields.io/github/v/release/NeilM5/BinderShell?label=latest%20version)
 ![.NET](https://img.shields.io/badge/.NET-9.0-blueviolet)
 ![Platform](https://img.shields.io/badge/platform-Windows-green)
 ![License](https://img.shields.io/github/license/NeilM5/BinderShell)
