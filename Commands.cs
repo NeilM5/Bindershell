@@ -5,43 +5,45 @@ public static class Commands
         Console.WriteLine(@"
         usage: [command] [options] [arguments]
 
+        *not implemented or in-development
+
         Directory and Navigation Commands
         ---------------------------------
-        - cd [path]                                             change directory
-        - list                                                  list all directories and files in the current directory
-        - tree                                                  show a visual tree of folders and files (warning with over 500 files/folders)
+        - cd [path]                                        change directory
+        - list                                             list all directories and files
+        - tree                                             show a visual tree of folders and files (with warning)
 
         File or Folder Operations
         ---------------
-        - create [-f / -d] [filename / foldername]              creates a file or folder in current directory
-        - move [-f / -d] [filename /foldername] [path]          moves a file or folder to a new location
-        - copy [filename / foldername] [path]                   copies a file or folder to a location
-        - rename [old] [new]                                    renames a file or folder to the new name
-        - zip [folder]                                          compress a folder to a .zip
-        - extract [folder] [path]                               extract folder to a path 
-        - del [-f / -d] [filename / foldername]                 deletes a file or folder (including sub files and directories) (with warning)
+        - create [-f / -d] [filename / foldername]         creates a file or folder
+        - *move [-f / -d] [filename /foldername] [path]    moves a file or folder to a new location
+        - *copy [filename / foldername] [path]             copies a file or folder to a new location
+        - *rename [old] [new]                              renames a file or folder to the new name
+        - *zip [folder]                                    compress a folder to a .zip
+        - *extract [folder] [path]                         extract folder to a path 
+        - del [-f / -d] [filename / foldername]            deletes a file or folder (with warning)
 
         File Organization and Information
         -------------------------------
-        - sort [type/date]                                      organize files into folders based on type or date
-        - find [extension]                                      lists path to files with provided extension
-        - mem [filename]                                        list the memory usage of a file
+        - *sort [options]                                  list organized files
+        - find [extension]                                 lists path to files with provided extension
+        - mem [filename]                                   list the memory usage of a file
         
         Utility and Customization
         -------------------------
-        - help                                                  show list of available commands
-        - ver                                                   show Bindershell version
-        - clear                                                 clears console screen
-        - time                                                  displays current system time
-        - uptime                                                displays total time Bindershell is in use
-        - history                                               lists all commands used so far
-        - exit                                                  exits Bindershell (also displays final uptime)
+        - help                                             show list of available commands
+        - ver                                              show Bindershell version
+        - clear                                            clears console screen
+        - time                                             displays current system time
+        - uptime                                           displays total time Bindershell is in use
+        - history                                          lists all commands used so far
+        - exit                                             exits Bindershell (also displays final uptime)
 
         BinderBox Commands
         ------------------
-        - bbox add [filename]                                   add a file to binderbox (deleted from original path)
-        - bbox extract [filename]                               extract a file from binderbox to current directory (deleted from binderbox)
-        - bbox list                                             list all files curently stored in binderbox
+        - bbox add [filename]                              add a file to binderbox
+        - bbox extract [filename]                          extract a file from binderbox to current directory
+        - bbox list                                        list all files curently stored in binderbox
         ");
     }
     public static void CurrentTime()
