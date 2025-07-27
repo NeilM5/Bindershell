@@ -1,4 +1,13 @@
 # Bindershell
+
+![.NET](https://img.shields.io/badge/.NET-9.0-blueviolet)
+![Platform](https://img.shields.io/badge/platform-Windows-green)
+![License](https://img.shields.io/github/license/NeilM5/BinderShell)
+![Last Commit](https://img.shields.io/github/last-commit/NeilM5/BinderShell)
+![Issues](https://img.shields.io/github/issues/NeilM5/BinderShell)
+![Stars](https://img.shields.io/github/stars/NeilM5/BinderShell?style=social)
+![Forks](https://img.shields.io/github/forks/NeilM5/BinderShell?style=social)
+
 A file management Command Line Interface (CLI) which allows you to navigate, operate, check, organize, and even store files.
 Bindershell has a built in Virtual File System (VFS) called **BinderBox**, which uses [LiteDB](https://www.litedb.org/) to store files securely.
 
@@ -72,6 +81,6 @@ Use `help` command to view all supported commands and their options
 ## License
 This project is licensed under the GNU GPL v3.0 License.
 
-See the [LICENSE](https://github.com/NeilM5/Bindershell?tab=MIT-1-ov-file#) for full terms.
+See the [LICENSE](https://github.com/NeilM5/Bindershell?tab=GPL-3.0-1-ov-file) for full terms.
 
 
