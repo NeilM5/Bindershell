@@ -20,6 +20,7 @@ Bindershell has a built in Virtual File System (VFS) called **BinderBox**, which
 - Check file/folder information (size, type, etc.)
 - Organize files/folders by extension or type
 - Store files/folders in Virtual File System (BinderBox)
+- Returns the amount of time taken for a command
 
 ---
 
