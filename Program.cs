@@ -66,6 +66,9 @@ class Program
                 break;
 
             // File Organization & Information
+            case "sort":
+                MeasureTime(() => Commands.Sort(parts));
+                break;
             case "find":
                 MeasureTime(() => Commands.Find(parts));
                 break;

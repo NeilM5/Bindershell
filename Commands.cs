@@ -431,6 +431,54 @@ public static class Commands
         }
     }
 
+    public static void Sort(string[] args)
+    {
+        if (args.Length < 3)
+        {
+            Console.WriteLine("usage: sort [-f / -d] [-t / -s / -dc]");
+        }
+
+        string option = args[1];
+        string sortFlag = args[2];
+
+        if (option == "-f")
+        {
+            var files = Directory.GetFiles(Globals.currentDir);
+            IEnumerable<string> sorted = null;
+
+            switch (sortFlag)
+            {
+                case "-t":
+                    sorted = files.OrderBy(f => Path.GetExtension(f));
+                    break;
+                case "-s":
+                    sorted = files.OrderBy(f => new FileInfo(f).Length);
+                    break;
+                case "-dc":
+                    sorted = files.OrderBy(f => File.GetCreationTime(f));
+                    break;
+            }
+
+            foreach (var file in sorted)
+            {
+                var fileInfo = new FileInfo(file);
+
+                switch (sortFlag)
+                {
+                    case "-t":
+                        Console.WriteLine($"[.{fileInfo.Extension.TrimStart('.')}] {fileInfo.Name,-30}");
+                        break;
+                    case "-s":
+                        Console.WriteLine($"[{fileInfo.Length,10} Bytes] {fileInfo.Name,-30}");
+                        break;
+                    case "-dc":
+                        Console.WriteLine($"[{fileInfo.CreationTime}] {fileInfo.Name,-30}");
+                        break;
+                }
+            }
+        }
+    }
+
     public static void Clear()
     {
         Console.Clear();
