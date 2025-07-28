@@ -58,13 +58,19 @@ class Program
             case "del":
                 MeasureTime(() => Commands.Delete(parts));
                 break;
-            case "mem":
-                MeasureTime(() => Commands.Mem(parts));
+            case "move":
+                MeasureTime(() => Commands.Move(parts));
+                break;
+            case "rename":
+                MeasureTime(() => Commands.Rename(parts));
                 break;
 
-            // File Organization
+            // File Organization & Information
             case "find":
                 MeasureTime(() => Commands.Find(parts));
+                break;
+            case "mem":
+                MeasureTime(() => Commands.Mem(parts));
                 break;
 
             // Utility & Customization

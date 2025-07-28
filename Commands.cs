@@ -16,9 +16,9 @@ public static class Commands
         File or Folder Operations
         ---------------
         - create [-f / -d] [filename / foldername]         creates a file or folder
-        - *move [-f / -d] [filename /foldername] [path]    moves a file or folder to a new location
-        - *copy [filename / foldername] [path]             copies a file or folder to a new location
-        - *rename [old] [new]                              renames a file or folder to the new name
+        - move [-f / -d] [filename /foldername] [path]     moves a file or folder to a new location
+        - *copy [-f / -d] [filename / foldername] [path]   copies a file or folder to a new location
+        - rename [old] [new]                               renames a file or folder to the new name
         - *zip [folder]                                    compress a folder to a .zip
         - *extract [folder] [path]                         extract folder to a path 
         - del [-f / -d] [filename / foldername]            deletes a file or folder (with warning)
@@ -206,7 +206,7 @@ public static class Commands
                 Console.WriteLine($"error creating directory: {e.Message}");
             }
         }
-        else Console.WriteLine($"unknown option: {args[1]}; use -file or -dir");
+        else Console.WriteLine($"unknown option: {option}; use -f or -d");
     }
 
     public static void Delete(string[] args)
@@ -269,7 +269,101 @@ public static class Commands
                 Console.WriteLine($"error deleting folder: {e.Message}");
             }
         }
-        else Console.WriteLine($"unknown option: {args[1]}; use -file or -dir");
+        else Console.WriteLine($"unknown option: {option}; use -f or -d");
+    }
+
+    public static void Move(string[] args)
+    {
+        if (args.Length < 4)
+        {
+            Console.WriteLine("usage: move [-f / -d] [filename / foldername] [path]");
+            return;
+        }
+
+        string option = args[1];
+        string name = args[2];
+        string src = Path.Combine(Globals.currentDir, name);
+        string dst = Path.IsPathRooted(args[3]) ? args[3] : Path.Combine(Globals.currentDir, args[3]);
+
+        if (option == "-f")
+        {
+            try
+            {
+                if (File.Exists(src))
+                {
+                    if (Directory.Exists(dst))
+                    {
+                        dst = Path.Combine(dst, Path.GetFileName(src));
+                    }
+
+                    File.Move(src, dst);
+                    Console.WriteLine($"moved file to {dst}: {name}");
+                }
+                else Console.WriteLine("file does not exist");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"error: {e.Message}");
+            }
+        }
+
+        else if (option == "-d")
+        {
+            try
+            {
+                if (Directory.Exists(src))
+                {
+                    if (Directory.Exists(dst))
+                    {
+                        dst = Path.Combine(dst, Path.GetFileName(src));
+                    }
+
+                    Directory.Move(src, dst);
+                    Console.WriteLine($"moved directory to {dst}: {name}");
+                }
+                else Console.WriteLine("directory does not exist");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"error: {e.Message}");
+            }
+        }
+
+        else Console.WriteLine($"unknown option: {option}; use -f or -d");
+    }
+
+    public static void Rename(string[] args)
+    {
+        if (args.Length < 3)
+        {
+            Console.WriteLine("usage: rename [old] [new]");
+            return;
+        }
+
+        string oldName = args[1];
+        string newName = args[2];
+
+        string src = Path.Combine(Globals.currentDir, oldName);
+        string dst = Path.Combine(Globals.currentDir, newName);
+
+        try
+        {
+            if (File.Exists(src))
+            {
+                File.Move(src, dst);
+                Console.WriteLine($"renamed file: {oldName} -> {newName}");
+            }
+            else if (Directory.Exists(src))
+            {
+                Directory.Move(src, dst);
+                Console.WriteLine($"renamed directory: {oldName} -> {newName}");
+            }
+            else Console.WriteLine("file or directory does not exist");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"error: {e.Message}");
+        }
     }
 
     public static void Mem(string[] args)
