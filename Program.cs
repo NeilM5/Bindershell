@@ -62,6 +62,9 @@ class Program
             case "move":
                 MeasureTime(() => Commands.Move(parts));
                 break;
+            case "copy":
+                MeasureTime(() => Commands.Copy(parts));
+                break;
             case "rename":
                 MeasureTime(() => Commands.Rename(parts));
                 break;
