@@ -463,6 +463,9 @@ public static class Commands
                 case "-dc":
                     sorted = files.OrderBy(f => File.GetCreationTime(f));
                     break;
+                default:
+                    Console.WriteLine($"unknown sort option: {sortFlag}");
+                    break;
             }
 
             foreach (var file in sorted)
@@ -475,13 +478,82 @@ public static class Commands
                         Console.WriteLine($"[.{fileInfo.Extension.TrimStart('.')}] {fileInfo.Name,-30}");
                         break;
                     case "-s":
-                        Console.WriteLine($"[{fileInfo.Length,10} Bytes] {fileInfo.Name,-30}");
+                        Console.WriteLine($"[{FormatBytes(fileInfo.Length),10}] {fileInfo.Name,-30}");
                         break;
                     case "-dc":
                         Console.WriteLine($"[{fileInfo.CreationTime}] {fileInfo.Name,-30}");
                         break;
                 }
             }
+        }
+
+        else if (option == "-d")
+        {
+            var dirs = Directory.GetDirectories(Globals.currentDir);
+            IEnumerable<string> sorted = null;
+
+            switch (sortFlag)
+            {
+                case "-s":
+                    sorted = dirs.OrderBy(d => GetDirectorySize(d));
+                    break;
+                case "-dc":
+                    sorted = dirs.OrderBy(d => Directory.GetCreationTime(d));
+                    break;
+                default:
+                    Console.WriteLine($"unknown sort option: {sortFlag}");
+                    break;
+            }
+
+            foreach (var dir in sorted)
+            {
+                var name = Path.GetFileName(dir);
+
+                switch (sortFlag)
+                {
+                    case "-s":
+                        long size = GetDirectorySize(dir);
+                        Console.WriteLine($"[{FormatBytes(size),10}] {name,-30}");
+                        break;
+                    case "-dc":
+                        Console.WriteLine($"[{Directory.GetCreationTime(dir)}] {name,-30}");
+                        break;
+                }
+            }
+        }
+
+        else Console.WriteLine($"unknown option: {option}; use -f or -d");
+    }
+
+    private static long GetDirectorySize(string path)
+    {
+        try
+        {
+            if (!Directory.Exists(path))
+            {
+                return 0;
+            }
+
+            long size = 0;
+
+            string[] files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
+
+            foreach (string file in files)
+            {
+                try
+                {
+                    FileInfo info = new FileInfo(file);
+                    size += info.Length;
+                }
+                catch { }
+            }
+
+            return size;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"error: {e.Message}");
+            return 0;
         }
     }
 
