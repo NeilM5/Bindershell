@@ -17,10 +17,8 @@ public static class Commands
         ---------------
         - create [-f / -d] [filename / foldername]         creates a file or folder
         - move [-f / -d] [filename /foldername] [path]     moves a file or folder to a new location
-        - *copy [-f / -d] [filename / foldername] [path]   copies a file or folder to a new location
+        - copy [-f / -d] [filename / foldername] [path]   copies a file or folder to a new location
         - rename [old] [new]                               renames a file or folder to the new name
-        - *zip [folder]                                    compress a folder to a .zip
-        - *extract [folder] [path]                         extract folder to a path 
         - del [-f / -d] [filename / foldername]            deletes a file or folder (with warning)
 
         File Organization and Information
@@ -302,8 +300,8 @@ public static class Commands
                         dst = Path.Combine(dst, Path.GetFileName(src));
                     }
 
-                    File.Move(src, dst);
-                    Console.WriteLine($"moved file to {dst}: {name}");
+                    File.Copy(src, dst);
+                    Console.WriteLine($"copied file to {dst}: {name}");
                 }
                 else Console.WriteLine("file does not exist");
             }
@@ -324,7 +322,7 @@ public static class Commands
                         dst = Path.Combine(dst, Path.GetFileName(src));
                     }
 
-                    Directory.Move(src, dst);
+                    //Directory.(src, dst);
                     Console.WriteLine($"moved directory to {dst}: {name}");
                 }
                 else Console.WriteLine("directory does not exist");
@@ -336,6 +334,108 @@ public static class Commands
         }
 
         else Console.WriteLine($"unknown option: {option}; use -f or -d");
+    }
+
+    public static void Copy(string[] args)
+    {
+        if (args.Length < 3)
+        {
+            Console.WriteLine("usage: copy [-f / -d] [filename / foldername] [optional: path]");
+            return;
+        }
+
+        string option = args[1];
+        string name = args[2];
+        string current = Globals.currentDir;
+        string src = Path.Combine(current, name);
+
+        bool isFile = option == "-f";
+        if ((isFile && !File.Exists(src)) || (!isFile && !Directory.Exists(src)))
+        {
+            Console.WriteLine(isFile ? "file does not exist" : "directory does not exist");
+            return;
+        }
+
+        string dst;
+        bool duplicate = args.Length < 4;
+
+        if (duplicate)
+        {
+            dst = GetUniquePath(src, isFile);
+        }
+        else
+        {
+            string rawDst = Path.IsPathRooted(args[3]) ? args[3] : Path.Combine(current, args[3]);
+
+            if (Directory.Exists(rawDst))
+            {
+                dst = Path.Combine(rawDst, Path.GetFileName(src));
+            }
+            else dst = rawDst;
+
+            string dstFolder = isFile ? Path.GetDirectoryName(dst) : dst;
+
+            if (Path.GetFullPath(dstFolder).TrimEnd(Path.DirectorySeparatorChar) == Path.GetFullPath(current).TrimEnd(Path.DirectorySeparatorChar))
+            {
+                dst = GetUniquePath(dst, isFile);
+            }
+        }
+
+        try
+        {
+            if (isFile)
+            {
+                File.Copy(src, dst);
+                Console.WriteLine($"copied file to: {dst}");
+            }
+            else
+            {
+                CopyDirectory(src, dst, true);
+                Console.WriteLine($"copied directory to: {dst}");
+            }
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"error: {e.Message}");
+        }
+    }
+
+    private static string GetUniquePath(string basePath, bool isFile)
+    {
+        string? dir = Path.GetDirectoryName(basePath);
+        string name = isFile ? Path.GetFileNameWithoutExtension(basePath) : Path.GetFileName(basePath);
+        string ext = isFile ? Path.GetExtension(basePath) : "";
+
+        int i = 1;
+
+        string temp = basePath;
+
+        do
+        {
+            temp = Path.Combine(dir, $"{name}_{i++}{ext}");
+        }
+        while ((isFile && File.Exists(temp)) || (!isFile && Directory.Exists(temp)));
+
+        return temp;
+    }
+
+    private static void CopyDirectory(string srcDir, string dstDir, bool canCopySubDirs)
+    {
+        Directory.CreateDirectory(dstDir);
+
+        foreach (var file in Directory.GetFiles(srcDir))
+        {
+            File.Copy(file, Path.Combine(dstDir, Path.GetFileName(file)));
+        }
+
+        if (canCopySubDirs)
+        {
+            foreach (var subDir in Directory.GetDirectories(srcDir))
+            {
+                CopyDirectory(subDir, Path.Combine(dstDir, Path.GetFileName(subDir)), true);
+            }
+        }
     }
 
     public static void Rename(string[] args)
