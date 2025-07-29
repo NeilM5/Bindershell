@@ -25,7 +25,7 @@ public static class Commands
 
         File Organization and Information
         -------------------------------
-        - *sort [options]                                  list organized files
+        - sort [check sort options below]                  list files organized by type, size, and date created
         - find [extension]                                 lists path to files with provided extension
         - mem [filename]                                   list the memory usage of a file
         
@@ -44,6 +44,12 @@ public static class Commands
         - bbox add [filename]                              add a file to binderbox
         - bbox extract [filename]                          extract a file from binderbox to current directory
         - bbox list                                        list all files curently stored in binderbox
+
+        Sort Options
+        ------------
+        - sort -f -t                                       sort files by type (extension)
+        - sort [-f / -d] -s                                sort files or directories by size
+        - sort [-f / -d] -dc                               sort files or directories by date created
         ");
     }
     public static void CurrentTime()
