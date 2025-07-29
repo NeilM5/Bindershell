@@ -450,7 +450,7 @@ public static class Commands
         if (option == "-f")
         {
             var files = Directory.GetFiles(Globals.currentDir);
-            IEnumerable<string> sorted = null;
+            IEnumerable<string> sorted = Enumerable.Empty<string>();
 
             switch (sortFlag)
             {
@@ -467,6 +467,8 @@ public static class Commands
                     Console.WriteLine($"unknown sort option: {sortFlag}");
                     break;
             }
+
+            if (sorted == null) return;
 
             foreach (var file in sorted)
             {
@@ -490,7 +492,7 @@ public static class Commands
         else if (option == "-d")
         {
             var dirs = Directory.GetDirectories(Globals.currentDir);
-            IEnumerable<string> sorted = null;
+            IEnumerable<string> sorted = Enumerable.Empty<string>();
 
             switch (sortFlag)
             {
@@ -504,6 +506,8 @@ public static class Commands
                     Console.WriteLine($"unknown sort option: {sortFlag}");
                     break;
             }
+
+            if (sorted == null) return;
 
             foreach (var dir in sorted)
             {

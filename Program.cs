@@ -1,10 +1,11 @@
 ﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 class Program
 {
     static void Main()
     {
-        Globals.currentDir = "C:\\";
+        Globals.currentDir = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "C:\\" : "/";
         while (true)
         {
             Console.Write($"\nBindershell | [\u001b[32m{Globals.currentDir}\u001b[0m] > ");
