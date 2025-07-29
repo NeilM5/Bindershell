@@ -371,9 +371,9 @@ public static class Commands
             }
             else dst = rawDst;
 
-            string dstFolder = isFile ? Path.GetDirectoryName(dst) : dst;
+            string? dstFolder = isFile ? Path.GetDirectoryName(dst) : dst;
 
-            if (Path.GetFullPath(dstFolder).TrimEnd(Path.DirectorySeparatorChar) == Path.GetFullPath(current).TrimEnd(Path.DirectorySeparatorChar))
+            if (dstFolder != null && (Path.GetFullPath(dstFolder).TrimEnd(Path.DirectorySeparatorChar) == Path.GetFullPath(current).TrimEnd(Path.DirectorySeparatorChar)))
             {
                 dst = GetUniquePath(dst, isFile);
             }
@@ -411,6 +411,12 @@ public static class Commands
 
         do
         {
+            if (dir == null)
+            {
+                Console.WriteLine("cannot determine directory for path");
+                return "";
+            }
+            
             temp = Path.Combine(dir, $"{name}_{i++}{ext}");
         }
         while ((isFile && File.Exists(temp)) || (!isFile && Directory.Exists(temp)));
