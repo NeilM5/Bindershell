@@ -5,8 +5,6 @@ public static class Commands
         Console.WriteLine(@"
         usage: [command] [options] [arguments]
 
-        *not implemented or in-development
-
         Directory and Navigation Commands
         ---------------------------------
         - cd [path]                                        change directory
@@ -17,7 +15,7 @@ public static class Commands
         ---------------
         - create [-f / -d] [filename / foldername]         creates a file or folder
         - move [-f / -d] [filename /foldername] [path]     moves a file or folder to a new location
-        - copy [-f / -d] [filename / foldername] [path]   copies a file or folder to a new location
+        - copy [-f / -d] [filename / foldername] [path]    copies a file or folder to a new location (or current directory if no path arg)
         - rename [old] [new]                               renames a file or folder to the new name
         - del [-f / -d] [filename / foldername]            deletes a file or folder (with warning)
 
