@@ -91,17 +91,13 @@ class Program
                 MeasureTime(Commands.CurrentTime);
                 break;
             case "uptime":
-                MeasureTime(() => Console.WriteLine($"total uptime: {Globals.upTime.Elapsed.ToString(@"hh\:mm\:ss")}"));
+                MeasureTime(Commands.UpTime);
                 break;
             case "clear":
                 Commands.Clear();
                 break;
             case "history":
-                int index = 1;
-                foreach (var entry in Globals.commandHistory)
-                {
-                    Console.WriteLine($"{index++}: {entry}");
-                }
+                MeasureTime(Commands.History);
                 break;
 
             // BinderBox
