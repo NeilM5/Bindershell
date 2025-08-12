@@ -3,49 +3,50 @@ public static partial class Commands
     public static void Help()
     {
         Console.WriteLine(@"
-        usage: [command] [options] [arguments]
+        usage: [command] [options] [arguments] [extra options]
+        key: opt. = optional
 
         Directory and Navigation Commands
         ---------------------------------
-        - cd [path]                                        change directory
-        - list                                             list all directories and files
-        - tree                                             show a visual tree of folders and files (with warning)
+        - cd [path]                                             change directory
+        - list                                                  list all directories and files
+        - tree                                                  show a visual tree of folders and files (with warning)
 
         File or Folder Operations
         ---------------
-        - create [-f / -d] [filename / foldername]         creates a file or folder
-        - move [-f / -d] [filename /foldername] [path]     moves a file or folder to a new location
-        - copy [-f / -d] [filename / foldername] [path]    copies a file or folder to a new location (or current directory if no path arg)
-        - rename [old] [new]                               renames a file or folder to the new name
-        - del [-f / -d] [filename / foldername]            deletes a file or folder (with warning)
+        - create [-f / -d] [filename / foldername]              creates a file or folder
+        - move [-f / -d] [filename /foldername] [path]          moves a file or folder to a new location
+        - copy [-f / -d] [filename / foldername] [opt. path]    copies a file or folder to a new location
+        - rename [old] [new]                                    renames a file or folder to the new name
+        - del [-f / -d] [filename / foldername] [opt. -p]       deletes a file or folder (-p for permanent)
 
         File Organization and Information
         -------------------------------
-        - sort [check sort options below]                  list files organized by type, size, and date created
-        - find [extension]                                 lists path to files with provided extension
-        - mem [filename]                                   list the memory usage of a file
+        - sort [check sort options below]                       list files organized by type, size, and date created
+        - find [extension]                                      lists path to files with provided extension
+        - mem [filename]                                        list the memory usage of a file
         
         Utility and Customization
         -------------------------
-        - help                                             show list of available commands
-        - ver                                              show Bindershell version
-        - clear                                            clears console screen
-        - time                                             displays current system time
-        - uptime                                           displays total time Bindershell is in use
-        - history                                          lists all commands used so far
-        - exit                                             exits Bindershell (also displays final uptime)
+        - help                                                  show list of available commands
+        - ver                                                   show Bindershell version
+        - clear                                                 clears console screen
+        - time                                                  displays current system time
+        - uptime                                                displays total time Bindershell is in use
+        - history                                               lists all commands used so far
+        - exit                                                  exits Bindershell (also displays final uptime)
 
         BinderBox Commands
         ------------------
-        - bbox add [filename]                              add a file to binderbox
-        - bbox extract [filename]                          extract a file from binderbox to current directory
-        - bbox list                                        list all files curently stored in binderbox
+        - bbox add [filename]                                   add a file to binderbox
+        - bbox extract [filename]                               extract a file from binderbox to current directory
+        - bbox list                                             list all files curently stored in binderbox
 
         Sort Options
         ------------
-        - sort -f -t                                       sort files by type (extension)
-        - sort [-f / -d] -s                                sort files or directories by size
-        - sort [-f / -d] -dc                               sort files or directories by date created
+        - sort -f -t                                            sort files by type (extension)
+        - sort [-f / -d] -s                                     sort files or directories by size
+        - sort [-f / -d] -dc                                    sort files or directories by date created
         ");
     }
     public static void CurrentTime()
