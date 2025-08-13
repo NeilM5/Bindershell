@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 class Program
@@ -9,7 +10,7 @@ class Program
         while (true)
         {
             Console.Write($"\nBindershell | [{Themes.GetColor("dirColor")}{Globals.currentDir}{Themes.GetColor("end")}] > ");
-            var input = Console.ReadLine();
+            var input = ReadCommandLine();
 
             if (string.IsNullOrWhiteSpace(input)) continue;
             else Globals.commandHistory.Add(input);
@@ -110,7 +111,7 @@ class Program
             case "bbox":
                 MeasureTime(() => Commands.BinderBoxCommand(parts));
                 break;
-                
+
             default:
                 Console.WriteLine($"invalid command: {cmd}");
                 break;
@@ -169,5 +170,45 @@ class Program
         }
 
         return inputList.ToArray();
+    }
+
+    static string ReadCommandLine()
+    {
+        var buffer = new List<char>();
+        bool inCommand = true;
+
+        while (true)
+        {
+            var key = Console.ReadKey(intercept: true);
+
+            if (key.Key == ConsoleKey.Enter)
+            {
+                Console.WriteLine();
+                break;
+            }
+
+            else if (key.Key == ConsoleKey.Backspace)
+            {
+                if (buffer.Count > 0)
+                {
+                    buffer.RemoveAt(buffer.Count - 1);
+                    Console.Write("\b \b");
+                    inCommand = !buffer.Contains(' ');
+                }
+            }
+
+            else
+            {
+                char c = key.KeyChar;
+                buffer.Add(c);
+
+                if (c == ' ') inCommand = false;
+
+                string color = inCommand ? Themes.GetColor("cmdColor") : Themes.GetColor("end");
+                Console.Write(color + c + Themes.GetColor("end"));
+            }
+        }
+
+        return new string(buffer.ToArray());
     }
 }

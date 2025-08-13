@@ -154,10 +154,6 @@ public static partial class Commands
                 Console.WriteLine($"[{index++}] {name}");
             }
         }
-        else
-        {
-            Console.WriteLine($"unknown option: {option}; use -ls or -#");
-        }
 
         try
         {
@@ -165,12 +161,15 @@ public static partial class Commands
             {
                 case "-1":
                     Themes.SetTheme("Default");
+                    Console.WriteLine("new theme set: Default");
                     break;
                 case "-2":
                     Themes.SetTheme("Ocean");
+                    Console.WriteLine("new theme set: Ocean");
                     break;
                 case "-3":
                     Themes.SetTheme("Sunset");
+                    Console.WriteLine("new theme set: Sunset");
                     break;
             }
         }

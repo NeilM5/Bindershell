@@ -16,22 +16,25 @@ public static class Themes
     {
         ["Default"] = new Dictionary<string, string>
         {
-            ["dirColor"] = "\u001b[32m",
-            ["timeColor"] = "\u001b[32m",
+            ["dirColor"] = "\u001b[38;2;111;194;118m",
+            ["timeColor"] = "\u001b[38;2;204;55;147m",
+            ["cmdColor"] = "\u001b[38;2;255;243;109m",
             ["end"] = "\u001b[0m"
         },
 
         ["Ocean"] = new Dictionary<string, string>
         {
-            ["dirColor"] = "\u001b[34m",
-            ["timeColor"] = "\u001b[36m",
+            ["dirColor"] = "\u001b[38;2;16;156;197m",
+            ["timeColor"] = "\u001b[38;2;60;178;235m",
+            ["cmdColor"] = "\u001b[38;2;56;200;216m",
             ["end"] = "\u001b[0m"
         },
 
         ["Sunset"] = new Dictionary<string, string>
         {
-            ["dirColor"] = "\u001b[38;5;214m",
-            ["timeColor"] = "\u001b[38;5;220m",
+            ["dirColor"] = "\u001b[38;2;251;144;98m",
+            ["timeColor"] = "\u001b[38;2;238;93;108m",
+            ["cmdColor"] = "\u001b[38;2;255;193;107m",
             ["end"] = "\u001b[0m"
         }
     };
