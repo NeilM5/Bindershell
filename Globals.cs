@@ -3,7 +3,7 @@ public static class Globals
 {
     public static string currentDir = Directory.GetCurrentDirectory();
     public static string homeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-    public static string version = "v1.7.5";
+    public static string version = "v1.8.5";
 
     public static List<string> commandHistory = new();
 
