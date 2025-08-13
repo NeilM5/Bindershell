@@ -36,6 +36,8 @@ public static partial class Commands
         - time                                                  displays current system time
         - uptime                                                displays total time Bindershell is in use
         - history                                               lists all commands used so far
+        - info                                                  prints Bindershell and system info (with logo)
+        - theme [-ls / -#]                                      lists themes (-ls) or changes it by theme number (-#)
         - exit                                                  exits Bindershell (also displays final uptime)
 
         BinderBox Commands
