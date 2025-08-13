@@ -36,13 +36,26 @@ cd Bindershell
 ```bash
 dotnet run
 ```
-### Run Executable (Windows)
+### Run
 > Recommended for users; no need to install .NET SDK
+
 1. Download the latest release from [Releases](https://github.com/NeilM5/Bindershell/releases)
 2. Extract the `.zip` file
-3. Double-click `Bindershell.exe` or run from terminal:
+
+#### Windows
+- Double-click `Bindershell.exe` or run from Command Prompt/PowerShell:
 ```bash
 ./Bindershell.exe
+```
+
+#### Linux/MacOS
+- Run from terminal:
+```
+./Bindershell
+```
+- If needed, make the file executable first:
+```
+chmod +x Bindershell
 ```
 
 ### Notes
