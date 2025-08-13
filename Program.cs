@@ -8,7 +8,7 @@ class Program
         Globals.currentDir = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "C:\\" : "/";
         while (true)
         {
-            Console.Write($"\nBindershell | [\u001b[32m{Globals.currentDir}\u001b[0m] > ");
+            Console.Write($"\nBindershell | [{Themes.GetColor("dirColor")}{Globals.currentDir}{Themes.GetColor("end")}] > ");
             var input = Console.ReadLine();
 
             if (string.IsNullOrWhiteSpace(input)) continue;
@@ -99,6 +99,12 @@ class Program
             case "history":
                 MeasureTime(Commands.History);
                 break;
+            case "info":
+                Commands.Info();
+                break;
+            case "theme":
+                MeasureTime(() => Commands.ChangeTheme(parts));
+                break;
 
             // BinderBox
             case "bbox":
@@ -125,7 +131,7 @@ class Program
         }
 
         stopWatch.Stop();
-        Console.WriteLine($"\u001b[35mtime taken: {stopWatch.Elapsed.TotalMilliseconds} ms\u001b[0m");
+        Console.WriteLine($"{Themes.GetColor("timeColor")}time taken: {stopWatch.Elapsed.TotalMilliseconds} ms{Themes.GetColor("end")}");
     }
 
     static string[] SplitArgs(string input)

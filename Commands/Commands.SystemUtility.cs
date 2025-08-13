@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices;
+
 public static partial class Commands
 {
     public static void Help()
@@ -78,6 +80,7 @@ public static partial class Commands
         if (args.Length < 2)
         {
             Console.WriteLine("usage: bbox [command] [arg]");
+            return;
         }
 
         string cmd = args[1];
@@ -106,6 +109,74 @@ public static partial class Commands
             case "mem":
                 BinderBox.Mem();
                 break;
+        }
+    }
+
+    public static void Info()
+    {
+        string color = Themes.GetColor("dirColor");
+        string end = "\u001b[0m";
+
+        Console.WriteLine($@"
+
+                    ****************                {color}Bindershell {Globals.version}{end}
+                 **********************             {color}OS: {end}{System.Runtime.InteropServices.RuntimeInformation.OSDescription}
+              ********            ********          {color}User: {end}{Environment.UserName}
+            *******                  *******        {color}Machine: {end}{Environment.MachineName}
+           ******                      ******       {color}Uptime: {end}{Globals.upTime.Elapsed.ToString(@"hh\:mm\:ss")}
+          ******                        ******      {color}Current Directory: {end}{Globals.currentDir}
+          ******       {color}**********{end}       ******      {color}Theme: {end}{Themes.GetThemeName()}
+          ******     {color}**************{end}     ******      
+          ******    {color}***          ***{end}    ******
+           ******  {color}***            ***{end} *******
+            ******{color}***              ***{end}******
+              *********          *********
+                 **********************
+                    ****************
+        ");
+    }
+
+    public static void ChangeTheme(string[] args)
+    {
+        if (args.Length < 1)
+        {
+            Console.WriteLine("usage: theme [-ls / -#]");
+            return;
+        }
+
+        string option = args[1];
+
+        if (option == "-ls")
+        {
+            int index = 1;
+            foreach (var name in Themes.themes.Keys)
+            {
+                Console.WriteLine($"[{index++}] {name}");
+            }
+        }
+        else
+        {
+            Console.WriteLine($"unknown option: {option}; use -ls or -#");
+        }
+
+        try
+        {
+            switch (option)
+            {
+                case "-1":
+                    Themes.SetTheme("Default");
+                    break;
+                case "-2":
+                    Themes.SetTheme("Ocean");
+                    break;
+                case "-3":
+                    Themes.SetTheme("Sunset");
+                    break;
+            }
+        }
+        catch
+        {
+            Console.WriteLine($"theme does not exist");
         }
     }
 }
