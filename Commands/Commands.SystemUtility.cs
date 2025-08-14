@@ -88,7 +88,7 @@ public static partial class Commands
         Console.WriteLine("available versions:");
         foreach (var tag in tags)
         {
-            string version = tag.GetProperty("name").GetString();
+            string version = tag.GetProperty("name").GetString() ?? "unknown version";
             Console.WriteLine($"- {version}");
         }
     }
