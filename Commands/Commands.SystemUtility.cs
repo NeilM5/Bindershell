@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using System.Text.Json;
 
 public static partial class Commands
 {
@@ -53,6 +54,43 @@ public static partial class Commands
         - sort [-f / -d] -s                                     sort files or directories by size
         - sort [-f / -d] -dc                                    sort files or directories by date created
         ");
+    }
+
+    public static void Ver(string[] args)
+    {
+        if (args.Length < 2)
+        {
+            Console.WriteLine(Globals.version);
+            return;
+        }
+
+        string option = args[1];
+
+        if (option == "-ls")
+        {
+            GetVersions().GetAwaiter().GetResult();
+        }
+    }
+
+    private static async Task GetVersions()
+    {
+        var client = new HttpClient();
+        client.DefaultRequestHeaders.UserAgent.ParseAdd("Bindershell-Versions");
+
+        string repo = "NeilM5/Bindershell";
+        string url = $"https://api.github.com/repos/{repo}/tags";
+
+        var response = await client.GetStringAsync(url);
+
+        using var doc = JsonDocument.Parse(response);
+        var tags = doc.RootElement.EnumerateArray();
+
+        Console.WriteLine("available versions:");
+        foreach (var tag in tags)
+        {
+            string version = tag.GetProperty("name").GetString();
+            Console.WriteLine($"- {version}");
+        }
     }
 
     public static void Mode(string[] args)

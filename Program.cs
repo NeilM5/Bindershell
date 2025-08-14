@@ -45,6 +45,12 @@ class Program
             return;
         }
 
+        if (cmd == "info")
+        {
+            Commands.Info();
+            return;
+        }
+
         if (Globals.currentMode == "box")
         {
             MeasureTime(() => Commands.BinderBoxCommand(parts));
@@ -97,7 +103,7 @@ class Program
                 Commands.Help();
                 break;
             case "ver":
-                Console.WriteLine(Globals.version);
+                Commands.Ver(parts);
                 break;
             case "time":
                 MeasureTime(Commands.CurrentTime);
@@ -110,9 +116,6 @@ class Program
                 break;
             case "history":
                 MeasureTime(Commands.History);
-                break;
-            case "info":
-                Commands.Info();
                 break;
             case "theme":
                 MeasureTime(() => Commands.ChangeTheme(parts));
