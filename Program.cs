@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 class Program
@@ -9,7 +8,7 @@ class Program
         Globals.currentDir = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "C:\\" : "/";
         while (true)
         {
-            Console.Write($"\nBindershell | [{Themes.GetColor("dirColor")}{Globals.currentDir}{Themes.GetColor("end")}] > ");
+            Console.Write($"\nBinder{(Globals.currentMode == "shell" ? "shell" : "box")} | [{Themes.GetColor("dirColor")}{Globals.currentDir}{Themes.GetColor("end")}] > ");
             var input = ReadCommandLine();
 
             if (string.IsNullOrWhiteSpace(input)) continue;
@@ -39,6 +38,18 @@ class Program
         if (parts.Length == 0) return;
 
         string cmd = parts[0].ToLower();
+
+        if (cmd == "mode")
+        {
+            MeasureTime(() => Commands.Mode(parts));
+            return;
+        }
+
+        if (Globals.currentMode == "box")
+        {
+            MeasureTime(() => Commands.BinderBoxCommand(parts));
+            return;
+        }
 
         switch (cmd)
         {
@@ -107,9 +118,8 @@ class Program
                 MeasureTime(() => Commands.ChangeTheme(parts));
                 break;
 
-            // BinderBox
             case "bbox":
-                MeasureTime(() => Commands.BinderBoxCommand(parts));
+                Console.WriteLine("Deprecated: 'bbox' is no longer used\nuse 'mode box' to switch to Binderbox mode to access Binderbox commands");
                 break;
 
             default:

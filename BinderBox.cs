@@ -4,6 +4,24 @@ public static class BinderBox
 {
     private static readonly string binderFile = Path.Combine(AppContext.BaseDirectory, "binderbox.bbox");
 
+    public static void Help()
+    {
+        Console.WriteLine(@"
+        Binderbox
+        ---------
+
+        usage: [command] [args]
+
+        - help                      lists the available Binderbox commands
+        - add [filename]            adds a file to Binderbox from the current directory
+        - extract [filename]        extracts a file from Binderbox into the current directory
+        - list                      lists any files stored in Binderbox
+        - mem                       prints the total size of Binderbox
+
+        - mode [shell / box]        switch between Bindershell or Binderbox mode
+        ");
+    }
+
     public static void Add(string path)
     {
         path = Path.GetFullPath(path);

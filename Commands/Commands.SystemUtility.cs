@@ -32,6 +32,7 @@ public static partial class Commands
         -------------------------
         - help                                                  show list of available commands
         - ver                                                   show Bindershell version
+        - mode [shell / box]                                    switch between Bindershell and Binderbox mode
         - clear                                                 clears console screen
         - time                                                  displays current system time
         - uptime                                                displays total time Bindershell is in use
@@ -40,7 +41,7 @@ public static partial class Commands
         - theme [-ls / -#]                                      lists themes (-ls) or changes it by theme number (-#)
         - exit                                                  exits Bindershell (also displays final uptime)
 
-        BinderBox Commands
+        (deprecated) BinderBox Commands
         ------------------
         - bbox add [filename]                                   add a file to binderbox
         - bbox extract [filename]                               extract a file from binderbox to current directory
@@ -53,6 +54,27 @@ public static partial class Commands
         - sort [-f / -d] -dc                                    sort files or directories by date created
         ");
     }
+
+    public static void Mode(string[] args)
+    {
+        if (args.Length < 1)
+        {
+            Console.WriteLine("usage: mode [shell / box]");
+            return;
+        }
+
+        string mode = args[1];
+
+        if (mode != "shell" && mode != "box")
+        {
+            Console.WriteLine($"invalid mode: {mode}; available modes: shell, box");
+            return;
+        }
+
+        Globals.currentMode = mode;
+        Console.WriteLine($"mode changed to: {Globals.currentMode}");
+    }
+
     public static void CurrentTime()
     {
         Console.WriteLine(DateTime.Now.ToString("MMM d yyyy | ddd | h:mm:ss tt"));
@@ -79,37 +101,43 @@ public static partial class Commands
 
     public static void BinderBoxCommand(string[] args)
     {
-        if (args.Length < 2)
+        if (args.Length < 1)
         {
-            Console.WriteLine("usage: bbox [command] [arg]");
+            Console.WriteLine("usage: [command] [args]; use 'help' to view available Binderbox commands");
             return;
         }
 
-        string cmd = args[1];
+        string cmd = args[0].ToLower();
 
         switch (cmd)
         {
+            case "help":
+                BinderBox.Help();
+                break;
             case "add":
-                if (args.Length >= 3)
+                if (args.Length >= 2)
                 {
-                    string fullPath = Path.Combine(Globals.currentDir, args[2]);
+                    string fullPath = Path.Combine(Globals.currentDir, args[1]);
                     BinderBox.Add(fullPath);
                 }
-                else Console.WriteLine("usage: bbox add [filename]");
+                else Console.WriteLine("usage: add [filename]");
                 break;
             case "extract":
-                if (args.Length >= 3)
+                if (args.Length >= 2)
                 {
-                    string fileName = args[2];
+                    string fileName = args[1];
                     BinderBox.Extract(fileName);
                 }
-                else Console.WriteLine("usage: bbox extract [filename]");
+                else Console.WriteLine("usage: extract [filename]");
                 break;
             case "list":
                 BinderBox.List();
                 break;
             case "mem":
                 BinderBox.Mem();
+                break;
+            default:
+                Console.WriteLine($"invalid Binderbox command: {cmd}; use 'help' to see available commands");
                 break;
         }
     }
@@ -122,13 +150,13 @@ public static partial class Commands
         Console.WriteLine($@"
 
                     ****************                {color}Bindershell {Globals.version}{end}
-                 **********************             {color}OS: {end}{System.Runtime.InteropServices.RuntimeInformation.OSDescription}
+                 **********************             {color}OS: {end}{RuntimeInformation.OSDescription}
               ********            ********          {color}User: {end}{Environment.UserName}
             *******                  *******        {color}Machine: {end}{Environment.MachineName}
            ******                      ******       {color}Uptime: {end}{Globals.upTime.Elapsed.ToString(@"hh\:mm\:ss")}
           ******                        ******      {color}Current Directory: {end}{Globals.currentDir}
-          ******       {color}**********{end}       ******      {color}Theme: {end}{Themes.GetThemeName()}
-          ******     {color}**************{end}     ******      
+          ******       {color}**********{end}       ******      {color}Current Mode: {end}{Globals.currentMode}
+          ******     {color}**************{end}     ******      {color}Theme: {end}{Themes.GetThemeName()}
           ******    {color}***          ***{end}    ******
            ******  {color}***            ***{end} *******
             ******{color}***              ***{end}******
