@@ -32,7 +32,7 @@ public static partial class Commands
         Utility and Customization
         -------------------------
         - help                                                  show list of available commands
-        - ver                                                   show Bindershell version
+        - ver [opt. -ls]                                        show Bindershell version (-ls will list all available versions)
         - mode [shell / box]                                    switch between Bindershell and Binderbox mode
         - clear                                                 clears console screen
         - time                                                  displays current system time
