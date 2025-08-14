@@ -7,3 +7,4 @@ publish/
 *.bbox 
 *.json 
 publish_all.bat
+zip_all.bat
