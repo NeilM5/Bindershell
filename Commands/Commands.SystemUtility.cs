@@ -149,6 +149,14 @@ public static partial class Commands
             case "help":
                 BinderBox.Help();
                 break;
+            case "use":
+                if (args.Length >= 2)
+                {
+                    string boxName = args[1];
+                    BinderBox.Use(boxName);
+                }
+                else Console.WriteLine("usage: use [boxname]");
+                break;
             case "add":
                 if (args.Length >= 2)
                 {

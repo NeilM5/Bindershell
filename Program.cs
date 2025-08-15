@@ -8,7 +8,7 @@ class Program
         Globals.currentDir = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "C:\\" : "/";
         while (true)
         {
-            Console.Write($"\nBinder{(Globals.currentMode == "shell" ? "shell" : "box")} | [{Themes.GetColor("dirColor")}{Globals.currentDir}{Themes.GetColor("end")}] > ");
+            Console.Write($"\nBinder{(Globals.currentMode == "shell" ? "shell" : $"box [{Themes.GetColor("dirColor")}{BinderBox.currentBoxName + ".bbox"}{Themes.GetColor("end")}]")} | [{Themes.GetColor("dirColor")}{Globals.currentDir}{Themes.GetColor("end")}] > ");
             var input = ReadCommandLine();
 
             if (string.IsNullOrWhiteSpace(input)) continue;

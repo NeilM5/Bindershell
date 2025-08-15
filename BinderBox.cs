@@ -1,8 +1,19 @@
+using System.Diagnostics.CodeAnalysis;
 using LiteDB;
 
 public static class BinderBox
 {
-    private static readonly string binderFile = Path.Combine(AppContext.BaseDirectory, "binderbox.bbox");
+    private static readonly string binderFolder = Path.Combine(AppContext.BaseDirectory, "binderboxes");
+    public static string currentBoxName = "binderbox";
+    private static string BinderFile => Path.Combine(binderFolder, currentBoxName + ".bbox");
+
+    static BinderBox()
+    {
+        if (!Directory.Exists(binderFolder))
+        {
+            Directory.CreateDirectory(binderFolder);
+        }
+    }
 
     public static void Help()
     {
@@ -13,6 +24,7 @@ public static class BinderBox
         usage: [command] [args]
 
         - help                                  lists the available Binderbox commands
+        - use [boxname]                         create or switch to a box (stored in 'binderboxes' folder)
         - add [filename/foldername]             adds a file to Binderbox from the current directory
         - extract [filename/foldername]         extracts a file from Binderbox into the current directory
         - list                                  lists any files (path if folder) stored in Binderbox
@@ -21,6 +33,28 @@ public static class BinderBox
 
         - mode [shell / box]                    switch between Bindershell or Binderbox mode
         ");
+    }
+
+    public static void Use(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            Console.WriteLine("please specify a box name");
+            return;
+        }
+
+        currentBoxName = name;
+        string path = BinderFile;
+
+        if (!File.Exists(path))
+        {
+            using (var db = new LiteDatabase(path)) { }
+            Console.WriteLine($"created new box: {name}.bbox");
+        }
+        else
+        {
+            Console.WriteLine($"switched to box: {name}.bbox");
+        }
     }
 
     public static void Add(string path)
@@ -44,7 +78,7 @@ public static class BinderBox
         }
 
 
-        using var db = new LiteDatabase(binderFile);
+        using var db = new LiteDatabase(BinderFile);
         var storage = db.GetStorage<string>();
 
         if (File.Exists(path))
@@ -94,7 +128,7 @@ public static class BinderBox
 
     public static void Extract(string path)
     {
-        using var db = new LiteDatabase(binderFile);
+        using var db = new LiteDatabase(BinderFile);
         var storage = db.GetStorage<string>();
 
         if (storage.Exists(path))
@@ -144,7 +178,7 @@ public static class BinderBox
 
     public static void List()
     {
-        using var db = new LiteDatabase(binderFile);
+        using var db = new LiteDatabase(BinderFile);
         var storage = db.GetStorage<string>();
 
         var allFiles = storage.FindAll();
@@ -161,7 +195,7 @@ public static class BinderBox
 
     public static void Mem()
     {
-        using var db = new LiteDatabase(binderFile);
+        using var db = new LiteDatabase(BinderFile);
         var storage = db.GetStorage<string>();
 
         long totalBytes = 0;
@@ -176,7 +210,7 @@ public static class BinderBox
 
     public static void Clear()
     {
-        using var db = new LiteDatabase(binderFile);
+        using var db = new LiteDatabase(BinderFile);
         var storage = db.GetStorage<string>();
 
         var allFiles = storage.FindAll().ToList();
