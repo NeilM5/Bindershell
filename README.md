@@ -67,14 +67,17 @@ chmod +x Bindershell
 ## BinderBox (VFS)
 Binderbox is the built-in Virtual File System (VFS) accessed through Bindershell.
 
-All files/folders are saved on binderbox.bbox which is created when first running `bbox` commands.
-
 ### BBox Features
-- Add files to BinderBox
-- Extract files from BinderBox
+- Create and use new Binderboxes
+- Add files to a BinderBox
+- Extract files from a BinderBox
 - List files with name, size, and data added
 - Check total size of BinderBox
 - Designed for secure and convenient embedded file storage
+
+All files and folder paths are saved to `.bbox` files stored in the `binderboxes` folder created when first switching to Binderbox mode.
+
+`binderbox.bbox` is the default storage.
 
 ---
 
@@ -82,12 +85,11 @@ All files/folders are saved on binderbox.bbox which is created when first runnin
 - `cd [path]` - change directory
 - `tree` - shows the directory struture (gives warning for large directories)
 - `create -f [filename]` - creates a file in current directory (use -d for making folders)
-- `del -f [filename]` - permanently delete a file in current directory with warning (use -d for deleting folders)
+- `del -f [filename]` - deletes a file in current directory by moving to a .trash folder (use -d for deleting folders)
 - `mem [filename]` - returns the size of a file
 - `find [extension]` - finds and lists the paths of all files from the current directory with given extension
 - `sort -f -t` - lists all files (-f) sorted by type (-t) (use `help` command to check `sort` options)
-- `bbox add [filename]` - add a file to BinderBox
-- `bbox list` - list all files in BinderBox with metadata
+- `mode box` - switches to Binderbox mode to access bbox commands (use `mode shell` to switch back)
 
 Use `help` command to view all supported commands and their options
 
