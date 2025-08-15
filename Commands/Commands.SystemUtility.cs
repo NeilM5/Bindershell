@@ -6,6 +6,9 @@ public static partial class Commands
     public static void Help()
     {
         Console.WriteLine(@"
+        Bindershell
+        -----------
+
         usage: [command] [options] [arguments] [extra options]
         key: opt. = optional
 
@@ -16,7 +19,7 @@ public static partial class Commands
         - tree                                                  show a visual tree of folders and files (with warning)
 
         File or Folder Operations
-        ---------------
+        -------------------------
         - create [-f / -d] [filename / foldername]              creates a file or folder
         - move [-f / -d] [filename /foldername] [path]          moves a file or folder to a new location
         - copy [-f / -d] [filename / foldername] [opt. path]    copies a file or folder to a new location
@@ -24,7 +27,7 @@ public static partial class Commands
         - del [-f / -d] [filename / foldername] [opt. -p]       deletes a file or folder (-p for permanent)
 
         File Organization and Information
-        -------------------------------
+        ---------------------------------
         - sort [check sort options below]                       list files organized by type, size, and date created
         - find [extension]                                      lists path to files with provided extension
         - mem [filename]                                        list the memory usage of a file
@@ -41,12 +44,6 @@ public static partial class Commands
         - info                                                  prints Bindershell and system info (with logo)
         - theme [-ls / -#]                                      lists themes (-ls) or changes it by theme number (-#)
         - exit                                                  exits Bindershell (also displays final uptime)
-
-        (deprecated) BinderBox Commands
-        ------------------
-        - bbox add [filename]                                   add a file to binderbox
-        - bbox extract [filename]                               extract a file from binderbox to current directory
-        - bbox list                                             list all files curently stored in binderbox
 
         Sort Options
         ------------
@@ -163,8 +160,8 @@ public static partial class Commands
             case "extract":
                 if (args.Length >= 2)
                 {
-                    string fileName = args[1];
-                    BinderBox.Extract(fileName);
+                    string extPath = args[1];
+                    BinderBox.Extract(extPath);
                 }
                 else Console.WriteLine("usage: extract [filename]");
                 break;
@@ -173,6 +170,9 @@ public static partial class Commands
                 break;
             case "mem":
                 BinderBox.Mem();
+                break;
+            case "clear":
+                BinderBox.Clear();
                 break;
             default:
                 Console.WriteLine($"invalid Binderbox command: {cmd}; use 'help' to see available commands");

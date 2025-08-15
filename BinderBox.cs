@@ -12,13 +12,14 @@ public static class BinderBox
 
         usage: [command] [args]
 
-        - help                      lists the available Binderbox commands
-        - add [filename]            adds a file to Binderbox from the current directory
-        - extract [filename]        extracts a file from Binderbox into the current directory
-        - list                      lists any files stored in Binderbox
-        - mem                       prints the total size of Binderbox
+        - help                                  lists the available Binderbox commands
+        - add [filename/foldername]             adds a file to Binderbox from the current directory
+        - extract [filename/foldername]         extracts a file from Binderbox into the current directory
+        - list                                  lists any files (path if folder) stored in Binderbox
+        - mem                                   prints the total size of Binderbox
+        - clear                                 permanently deletes all files and folders in Binderbox (with warning)
 
-        - mode [shell / box]        switch between Bindershell or Binderbox mode
+        - mode [shell / box]                    switch between Bindershell or Binderbox mode
         ");
     }
 
@@ -26,45 +27,119 @@ public static class BinderBox
     {
         path = Path.GetFullPath(path);
 
-        if (!File.Exists(path))
+        if (!File.Exists(path) && !Directory.Exists(path))
         {
-            Console.WriteLine("file not found in binderbox");
+            Console.WriteLine("file or folder not found in binderbox");
             return;
         }
 
-        string fileName = Path.GetFileName(path);
+        foreach (var forbidden in Globals.ForbiddenPaths)
+        {
+            if (path.Equals(forbidden, StringComparison.OrdinalIgnoreCase) ||
+            path.StartsWith(forbidden + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
+            {
+                Console.WriteLine("access denied: cannot add this file or folder into Binderbox");
+                return;
+            }
+        }
+
 
         using var db = new LiteDatabase(binderFile);
         var storage = db.GetStorage<string>();
 
-        storage.Delete(fileName);
+        if (File.Exists(path))
+        {
+            string fileName = Path.GetFileName(path);
 
-        storage.Upload(fileName, path);
+            storage.Delete(fileName);
+            storage.Upload(fileName, path);
+            File.Delete(path);
 
-        File.Delete(path);
+            Console.WriteLine($"added file to Binderbox: {fileName}");
+        }
+        else if (Directory.Exists(path))
+        {
+            string root = Path.GetFullPath(path);
+            string folderName = Path.GetFileName(root);
+            var allFiles = Directory.GetFiles(root, "*", SearchOption.AllDirectories);
 
-        Console.WriteLine($"added file to binderbox: {fileName}");
+            if (allFiles.Length > 100)
+            {
+                Console.WriteLine($"warning: folder contains more than {allFiles.Length} files; this may take a while");
+                Console.Write("continue? (y/n): ");
+                var input = Console.ReadLine();
+
+                if (input?.ToLower() != "y")
+                {
+                    Console.WriteLine("cancelled");
+                    return;
+                }
+            }
+
+            foreach (var file in allFiles)
+            {
+                string relInsideFolder = Path.GetRelativePath(root, file).Replace(Path.DirectorySeparatorChar, '/');
+                string storagePath = folderName + "/" + relInsideFolder;
+                storage.Delete(storagePath);
+                storage.Upload(storagePath, file);
+                File.Delete(file);
+            }
+
+            Directory.Delete(root, true);
+
+            Console.WriteLine($"added folder to Binderbox: {path} ({allFiles.Length} files)");
+        }
+
     }
 
-    public static void Extract(string fileName)
+    public static void Extract(string path)
     {
         using var db = new LiteDatabase(binderFile);
         var storage = db.GetStorage<string>();
 
-        if (!storage.Exists(fileName))
+        if (storage.Exists(path))
         {
-            Console.WriteLine("file not found in binderbox");
+            // Single File
+            string outPath = Path.Combine(Globals.currentDir, path.Replace('/', Path.DirectorySeparatorChar));
+            string outDir = Path.GetDirectoryName(outPath)!;
+            if (!Directory.Exists(outDir))
+            {
+                Directory.CreateDirectory(outDir);
+            }
+
+            using var outFile = File.Create(outPath);
+            storage.Download(path, outFile);
+            storage.Delete(path);
+
+            Console.WriteLine($"extracted file from Binderbox: {path}");
             return;
         }
 
-        string outPath = Path.Combine(Globals.currentDir, fileName);
+        var files = storage.FindAll()
+                    .Where(f => f.Id.StartsWith(path.TrimEnd('/') + "/", StringComparison.OrdinalIgnoreCase))
+                    .ToList();
 
-        using var outFile = File.Create(outPath);
-        storage.Download(fileName, outFile);
+        if (files.Count == 0)
+        {
+            Console.WriteLine("file or folder not found in Binderbox");
+            return;
+        }
 
-        storage.Delete(fileName);
+        foreach (var file in files)
+        {
+            string outPath = Path.Combine(Globals.currentDir, file.Id.Replace('/', Path.DirectorySeparatorChar));
+            string outDir = Path.GetDirectoryName(outPath)!;
+            if (!Directory.Exists(outDir))
+            {
+                Directory.CreateDirectory(outDir);
+            }
 
-        Console.WriteLine($"extracted file from binderbox: {fileName}");
+            using var outFile = File.Create(outPath);
+            storage.Download(file.Id, outFile);
+            storage.Delete(file.Id);
+        }
+
+        Console.WriteLine($"extracted folder from Binderbox: {path}");
     }
 
     public static void List()
@@ -97,5 +172,36 @@ public static class BinderBox
         }
 
         Console.WriteLine($"total storage: {Commands.FormatBytes(totalBytes)}");
+    }
+
+    public static void Clear()
+    {
+        using var db = new LiteDatabase(binderFile);
+        var storage = db.GetStorage<string>();
+
+        var allFiles = storage.FindAll().ToList();
+
+        if (!allFiles.Any())
+        {
+            Console.WriteLine("Binderbox is already empty");
+            return;
+        }
+
+        Console.WriteLine($"warning: this will permanently delete {allFiles.Count} file(s) from Binderbox");
+        Console.Write("continue? (y/n): ");
+        var input = Console.ReadLine();
+
+        if (input?.ToLower() != "y")
+        {
+            Console.WriteLine("cancelled");
+            return;
+        }
+
+        foreach (var file in allFiles)
+        {
+            storage.Delete(file.Id);
+        }
+
+        Console.WriteLine("Binderbox has been cleared");
     }
 }

@@ -1,12 +1,51 @@
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 public static class Globals
 {
     public static string currentDir = Directory.GetCurrentDirectory();
     public static string homeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-    public static string version = "v1.10.1";
+    public static string version = "v1.11.1";
     public static string currentMode = "shell";
     public static List<string> commandHistory = new();
     public static Stopwatch upTime = Stopwatch.StartNew();
+
+    public static string[] winForbiddenPaths = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? new[]
+    {
+        @"C:\",
+        @"C:\Windows",
+        @"C:\Program Files",
+        @"C:\Program Files (x86)",
+        @"C:\Users",
+        @"C:\PerfLogs"
+    } : Array.Empty<string>();
+
+    public static string[] linuxForbiddenPaths = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? new[]
+    {
+        "/",
+        "/boot",
+        "/dev",
+        "/etc",
+        "/lib",
+        "/lib64",
+        "/proc",
+        "/sys",
+        "/usr",
+        "/var",
+        "/home",
+        "/mnt"
+    } : Array.Empty<string>();
+
+    public static string[] macForbiddenPaths = RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? new[]
+    {
+        "/",
+        "/System",
+        "/bin",
+        "/usr",
+        "/Library",
+        "/Users"
+    } : Array.Empty<string>();
+
+    public static string[] ForbiddenPaths => winForbiddenPaths.Concat(linuxForbiddenPaths).Concat(macForbiddenPaths).ToArray();
 }
 
 public static class Themes
