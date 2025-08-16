@@ -120,9 +120,8 @@ class Program
             case "theme":
                 MeasureTime(() => Commands.ChangeTheme(parts));
                 break;
-
-            case "bbox":
-                Console.WriteLine("Deprecated: 'bbox' is no longer used\nuse 'mode box' to switch to Binderbox mode to access Binderbox commands");
+            case "note":
+                BinderNote.RunNote();
                 break;
 
             default:
