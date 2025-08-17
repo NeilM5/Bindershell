@@ -75,8 +75,8 @@ public static partial class Commands
                         dst = Path.Combine(dst, Path.GetFileName(src));
                     }
 
-                    File.Copy(src, dst);
-                    Console.WriteLine($"copied file to {dst}: {name}");
+                    File.Move(src, dst);
+                    Console.WriteLine($"moved file to {dst}: {name}");
                 }
                 else Console.WriteLine("file does not exist");
             }
@@ -97,7 +97,7 @@ public static partial class Commands
                         dst = Path.Combine(dst, Path.GetFileName(src));
                     }
 
-                    //Directory.(src, dst);
+                    Directory.Move(src, dst);
                     Console.WriteLine($"moved directory to {dst}: {name}");
                 }
                 else Console.WriteLine("directory does not exist");
