@@ -9,8 +9,10 @@
 ![Stars](https://img.shields.io/github/stars/NeilM5/BinderShell?style=social)
 ![Forks](https://img.shields.io/github/forks/NeilM5/BinderShell?style=social)
 
-A file management Command Line Interface (CLI) which allows you to navigate, operate, check, organize, and even store files.
-Bindershell has a built in Virtual File System (VFS) called **BinderBox**, which uses [LiteDB](https://www.litedb.org/) to store files securely.
+A file management Command Line Interface (CLI) which allows you to navigate, operate, check, organize, edit text and even store files.
+
+Bindershell has a built-in Virtual File System (VFS) called **BinderBox**, which uses [LiteDB](https://www.litedb.org/) to store files securely.\
+Bindershell also includes a built-in text editor similar to Vim called **BinderNote**.
 
 ---
 
@@ -20,6 +22,7 @@ Bindershell has a built in Virtual File System (VFS) called **BinderBox**, which
 - Check file/folder information (size, type, etc.)
 - Organize files/folders by extension or type
 - Store files/folders in Virtual File System (BinderBox)
+- Edit text files using Bindernote
 - Returns the amount of time taken for a command
 
 ---
@@ -81,6 +84,21 @@ All files and folder paths are saved to `.bbox` files stored in the `binderboxes
 
 ---
 
+### BinderNote (Text-Editor)
+Bindernote is a built-in Vim-like text editor accessed through Bindershell.
+
+### BNote Features
+- Switch between Command and Edit modes
+- Dynamic Status Bar
+- Save files with name or default to `bindernote.txt`
+- Open new files
+- Find and Replace text
+- Exit out easily
+
+`bindernote.txt` is the default text file
+
+---
+
 ## Example Commands
 - `cd [path]` - change directory
 - `tree` - shows the directory struture (gives warning for large directories)
@@ -90,6 +108,7 @@ All files and folder paths are saved to `.bbox` files stored in the `binderboxes
 - `find [extension]` - finds and lists the paths of all files from the current directory with given extension
 - `sort -f -t` - lists all files (-f) sorted by type (-t) (use `help` command to check `sort` options)
 - `mode box` - switches to Binderbox mode to access bbox commands (use `mode shell` to switch back)
+- `note` - opens Bindernote
 
 Use `help` command to view all supported commands and their options
 
