@@ -203,6 +203,8 @@ public static class BinderNote
         f / find [old] r / replace [new]                    find and replace
         q / quit                                            quit (with warning)
         e / edit                                            return to edit mode
+
+        press esc to return to command mode from edit mode
         ");
         Console.Write("\npress any key to continue...");
         Console.ReadKey(true);
