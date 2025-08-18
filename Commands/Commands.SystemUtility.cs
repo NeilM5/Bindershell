@@ -17,6 +17,7 @@ public static partial class Commands
         - cd [path]                                             change directory
         - list                                                  list all directories and files
         - tree                                                  show a visual tree of folders and files (with warning)
+        - link -s [filename / foldername] [linkname]            creates a symlink (Windows requires Developer Mode to be on)
 
         File or Folder Operations
         -------------------------
