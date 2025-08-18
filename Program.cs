@@ -69,6 +69,9 @@ class Program
             case "tree":
                 MeasureTime(() => Commands.Tree(Globals.currentDir));
                 break;
+            case "link":
+                MeasureTime(() => Commands.Link(parts));
+                break;
 
             // File Operations
             case "create":

@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices;
+
 public static partial class Commands
 {
     public static void ChangeDirectory(string[] args)
@@ -76,5 +78,74 @@ public static partial class Commands
 
         Traverse(path, indent);
     }
-    
+
+    public static void Link(string[] args)
+    {
+        if (args.Length < 4)
+        {
+            Console.WriteLine("usage: link [-s] [target] [linkname]");
+            return;
+        }
+
+        string option = args[1];
+        string target = Path.IsPathRooted(args[2]) ? args[2] : Path.Combine(Globals.currentDir, args[2]);
+        string linkname = Path.IsPathRooted(args[3]) ? args[3] : Path.Combine(Globals.currentDir, args[3]);
+
+        try
+        {
+            if (option == "-s")
+            {
+                if (!File.Exists(target) && !Directory.Exists(target))
+                {
+                    Console.WriteLine("file or directory does not exist");
+                }
+
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    if (!IsWindowsDevModeEnabled())
+                    {
+                        Console.WriteLine("warning: Windows Developer Mode is not enabled; symlinks may require admin privileges");
+                    }
+                }
+                
+                if (File.Exists(target))
+                {
+                    File.CreateSymbolicLink(linkname, target);
+                    Console.WriteLine($"file symbolic link created: {linkname} -> {target}");
+                }
+                else if (Directory.Exists(target))
+                {
+                    Directory.CreateSymbolicLink(linkname, target);
+                    Console.WriteLine($"directory symbolic link created: {linkname} -> {target}");
+                }
+            }
+            else Console.WriteLine($"unknown option: {option}; use -h or -s");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"error: {e.Message}");
+        }
+    }
+
+    private static bool IsWindowsDevModeEnabled()
+    {
+        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) return true;
+
+        try
+        {
+            using var key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
+                @"SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock",
+                false
+            );
+
+            if (key != null)
+            {
+                var value = key.GetValue("AllowDevelopmentWithoutDevLicense");
+                return value != null && (int)value == 1;
+            }
+        }
+        catch { }
+
+        return false;
+    }
 }
